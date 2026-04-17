@@ -1,0 +1,57 @@
+Follow these steps to launch the entire AI pipeline:
+
+--- 1. Prerequisites --------------------------------
+Ensure you have the following installed:
+1. Node.js (v18+)
+   - Check via: `node -v`
+2. MongoDB (Local or Atlas)
+   - Ensure MongoDB is running as a service locally (`mongod`), OR
+   - You have a MongoDB Atlas connection URI string ready.
+3. Ollama (Local AI Engine)
+   - Download from https://ollama.ai
+   - Start the service, then run:
+     `ollama pull llama3`
+   - Test it's working:
+     Ensure http://localhost:11434 is returning text in your browser.
+
+--- 2. Setup the Backend ----------------------------
+1. Open a terminal and navigate to the backend folder:
+   cd /path/to/curalink/backend
+2. Install dependencies (including new Transformers):
+   npm install
+3. Create your `.env` file (Optional but recommended):
+   - You can copy `.env.example` if available or create a basic one:
+     PORT=5000
+     MONGO_URI=mongodb://localhost:27017/curalink
+     OLLAMA_BASE_URL=http://localhost:11434
+     OLLAMA_MODEL=llama3
+4. Start the backend:
+   npm run dev
+5. Ensure the terminal says:
+   "MongoDB Connected" and "Backend running on port 5000"
+
+--- 3. Setup the Frontend ---------------------------
+1. Open a new, separate terminal and navigate to the frontend folder:
+   cd /path/to/curalink/frontend
+2. Install frontend dependencies:
+   npm install
+3. Start the React app:
+   npm start
+4. The dashboard will automatically pop up at: http://localhost:3000
+
+--- 4. Using the System -----------------------------
+1. In the Dashboard input box, try a deep medical query.
+   Valid Example Query:
+   Condition: "Lung Cancer"
+   Query: "Phase 3 clinical trials for mRNA vaccines and therapy outcomes"
+2. Wait while the backend performs:
+   - Topic semantic expansion (intent parsing)
+   - Deep parallel retrieval (PubMed + OpenAlex + Trials)
+   - Heavy inference embedding (Xenova Semantic Similarity Ranking)
+   - Clinical Theme Clustering & LLM Reasoning 
+3. Observe the structured, safe-fail outcome, with confidence score metrics displayed above your dashboard!
+
+--- Troubleshooting ---------------------------------
+* "Failed to connect to LLM": Ensure Ollama is running in the background. If on Mac, keep the app open. If on Windows, check the taskbar.
+* "Error starting transformer pipeline": The very first time you submit a query, the backend will slowly download a ~90MB semantic model file (Xenova/all-MiniLM-L6-v2) to memory. Please be patient on the first shot.
+* "MongoDB connection failed": Ensure `mongod` is running if you didn't configure a cloud Atlas URI.
